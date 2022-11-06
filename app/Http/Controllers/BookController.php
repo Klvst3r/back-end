@@ -14,7 +14,16 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        /*1. Regresar todos los libros
+            Book: Es el modelo de Eloquent para interacturar con la BD
+            */
+        return Book::all();
+
+        /*2. Podemos devolver un array vacio convirtiendo el resultado a JSON
+        Ej.
+        return ['Klvst3r'];
+        */
+        //return ['Klvst3r'];
     }
 
     /**
