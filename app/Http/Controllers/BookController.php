@@ -28,7 +28,7 @@ class BookController extends Controller
         /* Paginacion*/
         //return Book::paginate();
         /*4. Se vicualizaran todos los libros de momento       */
-        return Book::all();
+       return Book::all();
     }
 
     /**
