@@ -26,7 +26,9 @@ class BookController extends Controller
         //return ['Klvst3r'];
         
         /* Paginacion*/
-        return Book::paginate();
+        //return Book::paginate();
+        /*4. Se vicualizaran todos los libros de momento       */
+        return Book::all();
     }
 
     /**
