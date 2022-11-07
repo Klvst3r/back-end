@@ -88,7 +88,23 @@ class BookController extends Controller
     public function update(Request $request, Book $book)
     {
         //1. Mensaje del Patch
-        return 'PATCH by Klvst3r';
+        //return 'PATCH by Klvst3r';
+        
+
+        /* Actualización de datos*/ 
+
+        //return $book; Obtener el ID
+        $request->validate([
+            'title' => ['required']
+
+        ]);
+
+        $book->title = $request->input('title'); //obtencion de los datos
+        $book->save(); //Se guarda el valor en la BD
+
+        
+
+        return $book; //Se devuelve el valor del libro
     }
 
     /**
