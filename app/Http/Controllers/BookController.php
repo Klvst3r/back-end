@@ -39,7 +39,31 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //1. Retornamos algo para verificar que estamos accediento a los datos con el metodo POST
+        //return 'POST by Klvst3r';
+        
+
+        //2. De momento para instpeccionar el request vamos a retornarlo directamente 
+        //return $request->all();
+
+        //3. Se puede retornar directamente
+        //return $request;
+        
+
+        //5. Validamos antes de crear un nuevo libro
+        $request->validate([
+            'title' => ['required']
+
+        ]);
+
+        //4. Creamos un nuevo libro
+        $book = new Book; //Nueva instancia de Eloquent 
+        
+        $book->title = $request->input('title'); //obtencion de los datos en este caso del titulo
+        
+        $book->save(); //Se guarda el valor en la BD
+
+        return $book; //Se devuelve el valor del libro
     }
 
     /**
@@ -63,7 +87,8 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        //
+        //1. Mensaje del Patch
+        return 'PATCH by Klvst3r';
     }
 
     /**
@@ -74,6 +99,7 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        //1. Mensaje del Verbo delete
+        return 'Delete by Klvst3r';
     }
 }
