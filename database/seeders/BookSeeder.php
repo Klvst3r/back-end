@@ -17,6 +17,12 @@ class BookSeeder extends Seeder
      */
     public function run()
     {
+
+        
+        //Metodo truncate para evitar duplicidad de registros
+        DB::table('books')->truncate();
+
+        //Inserción de registros para los libros
         DB::table('books')->insert([
             'title' => 'Libro 1',
         ]);
