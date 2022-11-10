@@ -23,6 +23,6 @@ class DatabaseSeeder extends Seeder
         
         $this->call(BookSeeder::class);
 
-        dd(Books::class);
+        //dd(Books::class);
     }
 }
