@@ -24,7 +24,7 @@ class BookSeeder extends Seeder
 
         //Inserción de registros para los libros
         DB::table('books')->insert([
-            'title' => 'Libro 1',
+            'title' => 'Libro 2 ',
         ]);
     }
 }
