@@ -17,7 +17,7 @@ class BookController extends Controller
         /*1. Regresar todos los libros
             Book: Es el modelo de Eloquent para interacturar con la BD
             */
-        //return Book::all();
+        return Book::all();
 
         /*2. Podemos devolver un array vacio convirtiendo el resultado a JSON
         Ej.
@@ -28,7 +28,24 @@ class BookController extends Controller
         /* Paginacion*/
         //return Book::paginate();
         /*4. Se vicualizaran todos los libros de momento       */
-       return Book::all();
+       //return Book::all();
+       
+       //Si esta vacio el index que visualice un arreglo 
+       
+      /* $books = [
+        'uno',
+        'dos',
+        'tres'
+       ];
+       return $books;*/
+       
+
+            
+       
+
+
+
+
     }
 
     /**

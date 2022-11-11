@@ -16,3 +16,17 @@ use Illuminate\Support\Facades\Route;
 /*Route::get('/', function () {
     return view('welcome');
 });*/
+
+
+//Visualización de home
+Route::get('/', function(){
+    return 'Home';
+});
+
+
+/*Route::get('/api/books', function(){
+    return 'Home';
+});
+*/
+
+//Route::get('/', 'BookController@index');
