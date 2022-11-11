@@ -1,0 +1,46 @@
+Rutas
+-----
+[web.php]
+//Visualización de home
+Route::get('/', function(){
+    return 'Home';
+});
+
+
+Controllers
+-----
+php artisan make:controller BookControlle
+
+
+Migrations
+-----
+php artisan migrate //Ejecuta la migracion, crando la estructura de la bd
+php artisan migrate:reset //Devuelve todas las migraciones ejecutadas en orden inverso
+php artisan migrate:fresh // Ejecuta primero un reset, ejecutando los metodos down() de las migraciones, en orden inverso
+
+Seria el equivalente
+
+	php artisan migrate:reset
+	php artisan migrate
+
+
+php artisan migrate:rollback //Regresa el ultimo lote de migraciones ejecutadas
+
+
+
+Seeds
+-----
+php artisan make:seeder BookSeeder //Crea un Seeder llamado BookSeeder
+
+
+Test
+-----
+php artisan make:test BookTest
+
+Ejecutando pruebas unitarias
+-----
+>vendor /bin/phpunit
+
+Alias Pruebas Unitarias
+>alias t=vendor /bin/phpunit
+>t
