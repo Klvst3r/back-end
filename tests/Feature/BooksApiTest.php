@@ -30,9 +30,18 @@ class BooksApiTest extends TestCase
         //$this->get('/api/books')->dump(); //Se inspecciona la respuesta
 
         //4. Utilizando un nombre de ruta
-        $books = Book::factory(4)->create();
+        /*$books = Book::factory(4)->create();
         dd(route('books.index'));
-        $this->get(route('books.index'))->dump();
+        $this->get(route('books.index'))->dump();*/
+
+        //5. Devolviendo un Fragmento con JSON
+        $books = Book::factory(4)->create();
+        
+        $response = $this->getJson(route('books.index'));
+
+         $response->assertJsonFragment([
+            'title' => $books[0]->title
+        ]);
 
     
         
