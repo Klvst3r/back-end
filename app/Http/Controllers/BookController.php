@@ -41,10 +41,6 @@ class BookController extends Controller
        
 
             
-       
-
-
-
 
     }
 
@@ -110,6 +106,8 @@ class BookController extends Controller
 
         /* Actualización de datos*/ 
 
+        //return $book;
+
         //return $book; Obtener el ID
         $request->validate([
             'title' => ['required']
@@ -133,6 +131,10 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         //1. Mensaje del Verbo delete
-        return 'Delete by Klvst3r';
+        //return 'Delete by Klvst3r';
+        $book->delete();
+
+        return response()->noContent();
+        
     }
 }

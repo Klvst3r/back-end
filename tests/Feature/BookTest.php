@@ -8,15 +8,14 @@ use Tests\TestCase;
 
 class BookTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+     /** @test */
+     //Listado de Libros
+     
     public function test_example()
     {
         $response = $this->get('/');
-
         $response->assertStatus(200);
+        
+     
     }
 }

@@ -19,9 +19,9 @@ use Illuminate\Support\Facades\Route;
 
 
 //Visualización de home
-Route::get('/', function(){
+/*Route::get('/', function(){
     return 'Home';
-});
+});*/
 
 
 /*Route::get('/api/books', function(){

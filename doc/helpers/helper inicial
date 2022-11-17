@@ -44,3 +44,47 @@ Ejecutando pruebas unitarias
 Alias Pruebas Unitarias
 >alias t=vendor /bin/phpunit
 >t
+
+//Se comienza a crear las rutas en api.php
+
+Para crear varuios archivos a la vez, 
+
+php artisan make:model Book -mf --api
+
+
+
+Se definen las rutas en consideracion con el RESP API
+
+
+Posterior a ello, se listan rutas
+php artisan route:list
+
+GET|HEAD        api/books ................................................................................. books.index › BookController@index
+POST            api/books ................................................................................. books.store › BookController@store
+GET|HEAD        api/books/{book} .......................................................................... books.show › BookController@show
+PUT|PATCH       api/books/{book} .......................................................................... books.update › BookController@update
+DELETE          api/books/{book} .......................................................................... books.destroy › BookController@destroy
+
+Se define la rutas 5 definidas, la rutas trespectivas:
+index: Para obtener todos los libros
+store: Almacenar un libro
+show: mostrar un libro
+update: Actualizar un libro
+destroy: Eliminar un libro
+
+Tambien se indica el metodo del controlador se esta apuntando.
+
+Despues de configurar la Bd en el archivo .env se deberan ejecutar las migraciones por que la Bd esta en blanco totalmente.
+
+Pero antes hay que modificar 
+
+php artisan migrate
+
+Se tienen ya dos rutas listas dentro del Controlador BookController
+
+Index: para visualizar todos los datos registrados en la Bd
+Show: Para visualizar un registro por su ID
+
+Rara vez se pueden visualizar todos los resultados con el metodo all(), por lo que se puede utilizar el metodo paginate().
+
+Para utilizar los otros tres metodos se utiliza Postman
