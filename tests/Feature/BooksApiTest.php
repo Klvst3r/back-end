@@ -106,4 +106,22 @@ class BooksApiTest extends TestCase
 
     }
     
+    /** @test */
+
+    function can_update_books()
+    {
+       $books = Book::factory()->create(); 
+
+       $this->patchJson(route('books.update', $book), [
+            'title' => 'Edited book'
+       ])->assertJsonFragment([
+            'title' => 'Edited book'
+       ]);
+
+
+       //Verificamos en la base de datos la existencia
+       $this->assertDatabaseHas('books', [
+             'title' => 'Edited book'
+       ]);
+    }
 }

@@ -227,3 +227,51 @@ Vemos que funciona
 Verificamos en la Base de datos el metodo asertDatabaseHas() que recibe como primer parametro 
 
 Hasta aca no se esta verificando la  validación por ejemplo si vamos al BookController en el metodo store, si quitamos la validación el test sigue pasando
+
+Y no queremos eso, ya que queremos que el test nos avise en caso de que haya algun error en nuestro codigo, por ello estamos validando y queremos que el test nos avise.
+
+En estos casos, utilizamos lo que se conoce como un test de regresión, es decir encontramos el error. Lo hacemos fallara con un test con un 
+
+postJson a la misma ruta, y no pasamos nada como segundo parametro, es decir 
+
+---BooksApiTest
+
+Utilizamos un test de regresión para hacerlo falla, mediante el metodo asserJsonValidationErrorFor
+        //donde enviamos un PostJson y esperamos un error de validación en el campo title 
+        $this->postJson(route('books.store'),[])
+        ->assertJsonValidationErrorFor('title');
+
+---
+
+Ejecutamos prueba
+
+Jasta que todo pase correctamente.
+
+Ahora pasamos a los dos ultimos metodos.
+
+Se va a testear libros,
+
+Sera necesario un libro para actualizar, haciendo un patch JSON en este caso a la ruta Books Update, como segundo parametro de la funcion route 
+pasamos el libro para generar la ruta, y como segundo parametro para el patch Json.
+
+Pasamos el titulo editado.
+
+---BooksapiTest
+
+/** @test */
+
+    function can_update_books()
+    {
+       $books = Book::factory()->create(); 
+
+       $this->patchJson(route('books.update', $book), [
+            'title' => 'Edited book'
+       ])->assertJsonFragment([
+            'title' => 'Edited book'
+       ]);
+    }
+
+---
+
+
+Esto mismo vamos a esperar en la respuesta 
