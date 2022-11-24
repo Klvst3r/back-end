@@ -34,13 +34,15 @@ class BooksApiTest extends TestCase
         dd(route('books.index'));
         $this->get(route('books.index'))->dump();*/
 
-        //5. Devolviendo un Fragmento con JSON
+        //5. Devolviendo un Fragmento con JSON con el primer resultado
         $books = Book::factory(4)->create();
         
         $response = $this->getJson(route('books.index'));
 
          $response->assertJsonFragment([
             'title' => $books[0]->title
+        ])->assertJsonFragment([
+            'title' => $books[1]->title
         ]);
 
     
