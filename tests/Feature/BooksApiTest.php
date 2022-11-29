@@ -65,7 +65,7 @@ class BooksApiTest extends TestCase
     function can_get_one_book()
     {
         //1.//Se crea un libro con factory
-        
+        /*
         $book = Book::factory()->create();
 
          //Un getJson a la ruta books.show, para que genere la ruta. 
@@ -75,7 +75,26 @@ class BooksApiTest extends TestCase
         //Generamos la verificación
         $response->assertJsonFragment([
             'title' => $book->title
+        ]); */
+
+
+        //2. La resstructuración pidria ser que el 
+        // 
+          $book = Book::factory()->create();
+
+         //Un getJson a la ruta books.show, para que genere la ruta. 
+        dd(route('books.show', $book)); 
+        //Guardando la respuesta 
+        $response->$this->getJson(route('books.show', $book));
+        //Generamos la verificación
+        $response->assertJsonFragment([
+            'title' => $book->title
         ]);
+
+
+
+
+
     }
 
     /** @test */
@@ -132,4 +151,38 @@ class BooksApiTest extends TestCase
              'title' => 'Edited book'
        ]);
     }
+
+
+
+    /** @test */
+
+    function can_delete_books()
+    {
+        //1. Es necesario un libro para eliminar
+        $book = Book::factory()->create();
+
+        //1.1. Delete Json a la ruta book.destroy, pasandole el libro como parametro, para que genere la ruta
+        //Al final vamos a esperar nocontent es decir el status 204
+        $this->deleteJson(route('books.destroy', $book))
+        ->assertNoContent();
+
+        //1.2 Finalmente podemos hacer una verificación en la BD con assertDatabaseCount
+        //Diciendole que en la tabla Books, tenemos cero registro 
+        //Hay que tener en cuneta que cuando utilizamos refreshdatabase, cada vez que se ejecuta un test 
+        //Se ejecuta el refresco de la base de dato y cada test comienza con una BD en blanco.
+        //Este test comienza con un aBd en blanco, se crean cuatro registros, luego se vuelve a refrescar la BD 
+        //Va con el segundo donde verifica que solo hay un libro se ejecuta el test, luego se vuelve a refrescar la BD
+        //Va con el siguiente y asi sucesivamente.
+        //entonces al momento de llega a este delete  "can_delete_books", solo tendremos un libro y al mometno de eliminarlo no va haber ninguno en la base de datos.
+        //Entonces lo ejecutamos y verificamos si funciona.
+         
+        $this->assertDatabaseCount('books', 0);
+    }
+
+
+
+    //Ahora que tenemos todas las pruebas en verde podriamos hacer unas reestructuraciones.
+    //Por ejemplo vamosnos al metodo "can_get_one_book" siendo la seccion 2.
+    
+
 }
