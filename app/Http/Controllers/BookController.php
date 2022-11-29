@@ -40,10 +40,10 @@ class BookController extends Controller
        return $books;*/
        
        //5. una modificación
-        return Book::all();
+       return Book::all();
 
        //6. Localizar un libro, generara un error
-        //return Book::find(1);
+       //return Book::find(1);
 
             
 
@@ -114,10 +114,10 @@ class BookController extends Controller
         //return $book;
 
         //return $book; Obtener el ID
-       /* $request->validate([
+        $request->validate([
             'title' => ['required']
 
-        ]);*/
+        ]);
 
         $book->title = $request->input('title'); //obtencion de los datos
         $book->save(); //Se guarda el valor en la BD

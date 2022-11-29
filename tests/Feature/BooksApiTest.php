@@ -97,6 +97,7 @@ class BooksApiTest extends TestCase
         $this->postJson(route('books.store'), [
             'title' => 'My new book'
         ])->assertJsonFragment([
+            'title' => 'My new book'
          ]);
 
         //Este metodo recibe un primer parametro books y como segundo parametro recibe un array con los datos a verificar
@@ -111,6 +112,13 @@ class BooksApiTest extends TestCase
     function can_update_books()
     {
        $books = Book::factory()->create(); 
+
+
+       //VErifiacion de la validación
+       $this->patchJson(route('books.update', $book),[])
+        ->assertJsonValidationErrorFor('title');  
+
+       
 
        $this->patchJson(route('books.update', $book), [
             'title' => 'Edited book'
