@@ -1,0 +1,633 @@
+10. Pruebas Automaicas con Laravel
+
+Revisando la estructura en la carpeta 
+
+/test
+
+Existen dos tipos de test 
+
+	/Feature
+
+	/Unit
+
+
+El primero son test de caracteristicas donde se testean diferentes componentes que interactuan entre ellos y en la segunda se testean piezas especificas de codigo, como una clase, una funcion etc.
+
+De momento solo se probara con la primera pcion
+
+Podremos eleimiar por tanto El ejemplo de las pruebas unitarias
+
+
+Ahora podremos ejecutar en terminal:
+
+php artisan test
+
+
+Existe un error en este test:
+
+  • Tests\Feature\ExampleTest > the application returns a successful response
+  Expected response status code [200] but received 404.
+  Failed asserting that 200 is identical to 404.
+
+  at tests/Feature/ExampleTest.php:19
+     15▕     public function test_the_application_returns_a_successful_response()
+     16▕     {
+     17▕         $response = $this->get('/');
+     18▕ 
+  ➜  19▕         $response->assertStatus(200);
+     20▕     }
+     21▕ }
+     22▕ 
+
+
+  Tests:  1 failed
+  Time:   0.13s
+
+
+
+
+Esto es por que se ha quitado la ruta de inicio 
+
+Otra forma de ejecutar los test es de la siguiete manera:
+
+ Eliminamos el contenido del metodo:
+
+ class ExampleTest extends TestCase
+{
+    
+}
+
+
+Y ahora serenomba como: BooksApiTest.php
+
+Actualizando el nombre del metodo
+
+
+class BooksApiTest extends TestCase
+{
+    
+}
+
+
+Ahor alo primero que hay que testear es que se pueden ller todos los libros
+
+class BooksApiTest extends TestCase
+{
+    function can_get_all_books()
+    {
+        
+    }
+}
+
+
+
+Para poder probar que se recibieron los libros, es necesario tener libros en la BD
+
+
+<?php
+
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class BooksApiTest extends TestCase
+{
+    use RefreshDatabase;
+
+    function can_get_all_books()
+    {
+
+    }
+}
+
+
+
+
+Es importante configurar la BD para los test
+
+Ahora se tiene datos cuando se hagan las pruebas en local desde el navegador pero es necesario otra bd para cuando ejecutamos los test y no queremos que se eliminen los datos que estan probandose desde el navegador, por lo que se configura un aBD para los test
+
+
+Para ello en el archivo
+
+phpunit.xml
+
+
+En donde por defecto se tiene SQL y en memoria, vamos a cambiar el nombre de la bd, vamos a utilizar la bd con el nombre:
+<env name="DB_DATABASE" value="books_test"/>
+
+Esta base de datso no existe por lo que hay que crearla
+
+Ahora para crear un libro de prueba, al ejecutar el comando 
+
+phpmake module con todas las opcoines que le agregamos al principio se nos agrego tambien el factory
+
+BookFactory.php
+
+Esta clase nos va a crear registros de prueba, por  lo que se debe definir que campos queremos que se llene,
+en el caso de title y que los llene a traves del faker con una oracion aleatoria como titulo del libro.
+
+
+En: 
+
+/database/factories/BookFactory.php
+
+
+
+ public function definition()
+    {
+        return [
+            'title' => $this->faker->sentence();
+        ];
+    }
+
+  Ya qe con faker nos va a generar una oracion aleatoria y se guardara en el campo title
+
+
+  Ahora para utilizar ese factory en el archivo
+
+  test/Feature/BooksApiTest.php
+
+
+  Podemos crear una variable con el modelo book, llamar al modelo factory y con el metodo create decirle que cree un libro.
+
+  Es importante importar el modelo en la parte de arriba.
+
+  Inspeccionando con el metodo dd
+
+  Se podra ejecutar el test;
+
+  La prueba completa es:
+
+  ---
+    <?php
+
+    namespace Tests\Feature;
+
+    use App\Models\Book;
+
+    use Illuminate\Foundation\Testing\RefreshDatabase;
+    use Tests\TestCase;
+
+    class BooksApiTest extends TestCase
+    {
+        use RefreshDatabase;
+
+        /** @test */
+
+        function can_get_all_books()
+        {
+
+            $book = Book::factory()->create();
+
+            dd($book); //dom by die o dye dom para inspeccionar este libro
+            
+            
+
+            
+        }
+    }
+
+
+  ---
+
+En consola ejecutamos la prueba:
+php artisan test
+
+Generando la siguiente salida en terminal:
+
+---
+        App\Models\Book^ {#2184 // tests/Feature/BooksApiTest.php:21
+  #connection: "mysql"
+  #table: null
+  #primaryKey: "id"
+  #keyType: "int"
+  +incrementing: true
+  #with: []
+  #withCount: []
+  +preventsLazyLoading: false
+  #perPage: 15
+  +exists: true
+  +wasRecentlyCreated: true
+  #escapeWhenCastingToString: false
+  #attributes: array:4 [
+    "title" => "Autem aut voluptatem voluptas quo minima aliquid quas dolorum."
+    "updated_at" => "2022-11-02 18:34:48"
+    "created_at" => "2022-11-02 18:34:48"
+    "id" => 1
+  ]
+  #original: array:4 [
+    "title" => "Autem aut voluptatem voluptas quo minima aliquid quas dolorum."
+    "updated_at" => "2022-11-02 18:34:48"
+    "created_at" => "2022-11-02 18:34:48"
+    "id" => 1
+  ]
+  #changes: []
+  #casts: []
+  #classCastCache: []
+  #attributeCastCache: []
+  #dates: []
+  #dateFormat: null
+  #appends: []
+  #dispatchesEvents: []
+  #observables: []
+  #relations: []
+  #touches: []
+  +timestamps: true
+  #hidden: []
+  #visible: []
+  #fillable: []
+  #guarded: array:1 [
+    0 => "*"
+  ]
+}
+ 
+---
+
+Alo que podremos verificar con las tablas creadas:
+
+MariaDB [books_test]> show tables;
++------------------------+
+| Tables_in_books_test   |
++------------------------+
+| books                  |
+| failed_jobs            |
+| migrations             |
+| password_resets        |
+| personal_access_tokens |
+| users                  |
++------------------------+
+6 rows in set (0.001 sec)
+
+
+Con su respectivo contenido de cada tabla:
+
+La primer tabla esta vacia.
+Books
+
+La segunda tabla tambien esta vacio:
+failed:jobs
+
+En la tercera tabla es donde existe contenido:
+
+MariaDB [books_test]> select * from migrations;
++----+-------------------------------------------------------+-------+
+| id | migration                                             | batch |
++----+-------------------------------------------------------+-------+
+|  1 | 2014_10_12_000000_create_users_table                  |     1 |
+|  2 | 2014_10_12_100000_create_password_resets_table        |     1 |
+|  3 | 2019_08_19_000000_create_failed_jobs_table            |     1 |
+|  4 | 2019_12_14_000001_create_personal_access_tokens_table |     1 |
+|  5 | 2022_11_02_040718_create_books_table                  |     1 |
++----+-------------------------------------------------------+-------+
+5 rows in set (0.001 sec)
+
+
+Password_resets tambien esta vacia
+password_resets
+
+
+Vacia tambien 
+personal_access_tokens
+
+y la tabla de usuarios tambien esta vacia:
+users;
+
+
+
+
+
+Al ejecutar las pruebas tambien se pueden ejecutar multiples libros en la base de datos pasando un numero.
+
+Suponiendo que se quieren cuatro libros:
+
+---
+   $books = Book::factory(4)->create();
+
+        dd($books->count()); //Se cuentan los libros
+        
+---
+
+Se ejecuta la prueba:
+
+php artisan test
+
+Para verificar que son cuatro
+
+php artisan test
+ 4 // tests/Feature/BooksApiTest.php:27
+ 
+Una vez que se tienen los libros en la base de datos se hara una peticion de tipo GET
+
+---
+   $books = Book::factory(4)->create();
+
+   $this->get('/api/books')->dump() //Dump para inspeccionar la respuesta
+        
+---
+
+Se ejecuta nueva mente la prueba el resultado es:
+
+---
+php artisan test
+ array:4 [ // vendor/laravel/framework/src/Illuminate/Testing/TestResponse.php:1460
+  0 => {#2090
+    +"id": 1
+    +"title": "Aut aut velit iure provident vero similique."
+    +"created_at": "2022-11-02T19:10:04.000000Z"
+    +"updated_at": "2022-11-02T19:10:04.000000Z"
+  }
+  1 => {#2049
+    +"id": 2
+    +"title": "Praesentium repudiandae illum omnis sit qui ut dolore."
+    +"created_at": "2022-11-02T19:10:04.000000Z"
+    +"updated_at": "2022-11-02T19:10:04.000000Z"
+  }
+  2 => {#2179
+    +"id": 3
+    +"title": "Adipisci est officia sed modi ad."
+    +"created_at": "2022-11-02T19:10:04.000000Z"
+    +"updated_at": "2022-11-02T19:10:04.000000Z"
+  }
+  3 => {#2178
+    +"id": 4
+    +"title": "Id repellat sed qui distinctio."
+    +"created_at": "2022-11-02T19:10:04.000000Z"
+    +"updated_at": "2022-11-02T19:10:04.000000Z"
+  }
+]
+
+---
+
+Lo que se obtiene es un JSON con los cuatro libros que se generaron con factory.
+
+ AL URL puede cambiar a futuro por lo que ahora vamos  a utilizar un nombre de ruta:
+
+ Utilizando un nombre de ruta
+
+BooksApiTest.php
+ ---
+
+       $books = Book::factory(4)->create();
+        
+        dd(route('books.index'));
+
+        $this->get(route('books.index'))->dump();
+
+ ---
+
+ Ahora ejecutamos la prueba en consola
+
+ php artisan test
+
+La URL obtenida en la prueba es:
+
+php artisan test
+ "http://localhost/api/books" // tests/Feature/BooksApiTest.php:31
+
+ Esta es la URL a la que se va a visitar.
+
+ Ahora podemos hacer una peticion de tipo GET haciendo una peticin a la ruta devolviendo con el dump()
+
+
+ Ahora si en lugar de utilizar GET  podemos utilizar getJson para enviar los headers de application /JSON
+
+ Para ello 
+
+ ---
+        $books = Book::factory(4)->create();
+
+        $response = $this->getJson(route('books.index'));
+
+         $response->assertJsonFragment([
+            'title' => $books[0]->title
+        ]);
+        
+
+ ---
+
+ Corremos la prueba
+
+ php artisan test
+
+ Y observamos que funciona
+
+ php artisan test
+  
+   PASS  Tests\Feature\BooksApiTest
+  ✓ can get all books
+
+  Tests:  1 passed
+  Time:   0.35s
+
+
+Lo mismo podemos hacer con los demoas libros si se quiere. Se puede verificar el libro el segundo libro y ejecutamos
+
+
+Ahora para el sugundo libro 
+
+---
+ $response->assertJsonFragment([
+            'title' => $books[0]->title
+        ])->assertJsonFragment([
+            'title' => $books[1]->title
+        ]);
+---
+
+Se corre la prueba
+
+php artisan test
+
+Oservando que funciona:
+
+php artisan test
+  
+   PASS  Tests\Feature\BooksApiTest
+  ✓ can get all books
+
+  Tests:  1 passed
+  Time:   0.35s
+
+
+
+Con esto ya se tiene verificada la ruta index.
+
+Vamos ahora con la siguiente ruta
+
+BooksApiTest - Metodo can_get_all_books()
+---
+
+---
+
+Si no utilizamos 
+
+/** @test */
+
+Podemos utilizar el prefijo test para que funcione la prueba ese era uno de mis errores de ejecuación
+
+Ej.
+
+ /** @test */
+    //segunda ruta
+    
+
+     /** @test */
+
+    function can_get_one_book()
+    {
+        $book = Book::factory()->create(); //Se crea un libro con factory
+
+
+        //Para revisar la ruta
+        dd(route('books.show', $book));
+
+
+        //Se hace un getJson a la ruta books.show, pasandole el libro como parametro para que genere la ruta
+        $this->getJson(route('books.show', $book)) 
+    }
+Como es mi caso se prefiere utilizar la anotación
+
+
+--------------------
+
+Obtener un libro, creando un libro con factory
+
+Se corre la prueba
+
+php artisan test
+
+php artisan test
+  "http://localhost/api/books/5" // tests/Feature/BooksApiTest.php:60
+
+
+Podemos ver la URL a la que se va a acceder con getJson guardando la respuesta:
+
+---
+
+ $response = $this->getJson(route('books.show', $book)); 
+
+
+        $response->assertJsonFragment([
+            'title' => $book->title
+        ]);
+---
+
+
+php artisan test
+
+php artisan test
+  "http://localhost/api/books/5" // tests/Feature/BooksApiTest.php:60
+
+
+  Como podemos ver funciona
+
+  A veces cuando estamos creando test y luego de haber creado la implementacion lo que se suele hacer es ejecutar todos los test y volver 
+
+  Modificando el controlador
+
+  Por ejemplo en 
+
+  BookController.php
+
+  ---
+
+ quitar del primer metodo:
+
+ // return Book::all();
+  ---
+
+  Observamos que en este caso fallo la prueba 
+
+
+
+    //Verificar libros
+    /** @test */
+
+    function can_create_books()
+    {
+         $this->postJson(route('books.store'), [
+            'title' => 'My new Book'
+        ])->assertJsonFragment([
+            'title' => 'My new Book'
+        ]);
+    }
+
+
+    Adicional a esto se va a verificar en la BD pudiendo utilizar;
+
+    No se esta verificando la validación
+
+    con
+
+    ---
+
+    //Verificar libros
+    /** @test */
+
+    function can_create_books()
+    {
+         $this->postJson(route('books.store'), [
+            'title' => 'My new Book'
+        ])->assertJsonFragment([
+            'title' => 'My new Book'
+        ]);
+
+
+        //Para verificar
+        
+        $this->assertDatabaseHas('books', [
+            'title' => 'My new Book'
+        ]);
+
+
+    }
+
+    ---
+
+    Ya que si vamos al BookController en el metodo estore
+
+
+      /*   $request->validate([
+            'title' => ['required']
+
+        ]);*/
+
+
+        y corremos la prueba
+
+        php artisan test
+
+        La prueba sigue pasando y no queremos eso queremos que el test nos avise en caso de que exista algun error en nuestro codigo, en este caso no estamos validadndo y queresmo   fortuna y que el test nos avise.
+
+        Para ello utilizamos lo que se conoce como un test de regresión, es decir . se encuentra el error lo hacemos fallar con un test agregando ahi mismo en BooksApiTest.php
+
+
+---
+    
+      $this->postJson(route('books.store'), [])->assertJsonValidationErrorFor('title');
+
+---
+++Esperamos este error, enviando un postJson esperando un error de validation en el campo title, ejecutamos la prueba
+
+php artisan test
+
+Ahora genera un erro
+
+ at tests/Feature/BooksApiTest.php:79
+     75▕ 
+     76▕     function can_create_books()
+     77▕     {
+     78▕ 
+  ➜  79▕          $this->postJson(route('books.store'), [])->assertJsonValidationErrorFor('title');
+     80▕ 
+     81▕ 
+     82▕          $this->postJson(route('books.store'), [
+     83▕             'title' => 'My new Book'
+
+
+  Tests:  2 failed, 1 passed
+
+
+Ahora podremos agregar la validacion en BookController
+
