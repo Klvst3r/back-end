@@ -48,14 +48,25 @@ class BooksApiTest extends TestCase
         //6. Devolviendo dos libros de un Fragmento con JSON 
         $books = Book::factory(4)->create();
         
-        $response = $this->getJson(route('books.index'));
+        /*$response = $this->getJson(route('books.index'));
 
          $response->assertJsonFragment([
             'title' => $books[0]->title
         ])->assertJsonFragment([
             'title' => $books[1]->title
-        ]);
+        ]);*/
 
+
+        //Seccion C
+
+        //C.1 Modificamos el codigo anterior quedando de la siguiente manera
+            $this->getJson(route('books.index'))
+                ->assertJsonFragment([
+                    'title' => $books[0]->title
+                ])->assertJsonFragment([
+                    'title' => $books[1]->title
+                ]);
+        //Posterior a esto se hace la ejecución de pruebas de test, parece que se continua en verde.
         
     }
 
@@ -78,16 +89,17 @@ class BooksApiTest extends TestCase
         ]); */
 
 
-        //2. La resstructuración pidria ser que el 
+        //B.2. La reestructuración 
         // 
           $book = Book::factory()->create();
 
-         //Un getJson a la ruta books.show, para que genere la ruta. 
-        dd(route('books.show', $book)); 
+
+        //dd(route('books.show', $book)); 
         //Guardando la respuesta 
-        $response->$this->getJson(route('books.show', $book));
-        //Generamos la verificación
-        $response->assertJsonFragment([
+        // B.2.1. pidria ser que el  response lo estamos utilizando una sola vez, para que quede en una sola linea
+        //Pasamos a la seccion C en el metodo "can_get_all_books"
+        $this->getJson(route('books.show', $book))
+            ->assertJsonFragment([
             'title' => $book->title
         ]);
 
@@ -134,12 +146,12 @@ class BooksApiTest extends TestCase
 
 
        //VErifiacion de la validación
-       $this->patchJson(route('books.update', $book),[])
+       $this->patchJson(route('books.update', $books),[])
         ->assertJsonValidationErrorFor('title');  
 
        
 
-       $this->patchJson(route('books.update', $book), [
+       $this->patchJson(route('books.update', $books), [
             'title' => 'Edited book'
        ])->assertJsonFragment([
             'title' => 'Edited book'
