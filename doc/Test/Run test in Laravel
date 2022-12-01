@@ -1,0 +1,5 @@
+Run test in Laravel
+
+alias t='./vendor/bin/phpunit'
+
+t
