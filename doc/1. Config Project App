@@ -28,6 +28,30 @@ Agregamos todo al stage agregando un commit
 
 Arbrimos el proyecto en el editr de codigo.
 
+
+
+Configurando gitr para nuestro proyecto Front-end de la API de Laravel
+
+---
+    git init
+
+    git config -global init.defaultBranch main
+
+    git branch -M main
+
+    git add .
+
+    git commit -m "Setup Laravel Project App"
+
+    <Crear repo en Github>
+
+    git remote add origin git@github.com:Klvst3r/front-end.git
+
+    git push -u origin main
+
+------
+
+
 Para modificar el REDAME
 
 Con marckdown 

@@ -1,0 +1,28 @@
+2. Digital Ocean
+
+El siguiente paso sera crear una cuenta en digital Ocean.
+
+si no se tiene se pude crear con unos creditos disponibles.
+
+Obtener  Us$200 en digital ocean que se podran gastar en el transcurso de 60 dias tiempo mas que sufiente par las pruebas.
+
+Una vez creada  la cuenta se hace login. 
+
+en lap agina inicial.
+
+
+Digitasl Ocean Provee un agran variedad de servicios en la nube como seridores tradicionales llamdos Droplets, discos de almacenamientos, based de datos, entre otros.
+
+El servicio que vamos a utiliza en digital Ocean se conoce como 
+Apps/
+	La Premisa de las Apps es enfocate en el codigo no en los servidores.
+
+Las apps detectan lo que nuestra apicación necesita para funcionar y se encarga de construitr y hacer deply de los contenedores, sitios estaicos, etc.
+
+Apps es loq ue se va a utilizar.
+
+Pulsamos en el boton superior crear
+
+Luego en la opcion de apps
+
+	

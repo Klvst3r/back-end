@@ -1,0 +1,110 @@
+1. Deply incial con Github
+
+Ahora que ya tenemos el Back-end y el Front-end en diferentes repositorios de git en local es hora de subirlos a github.
+
+Si no se tiene una cuanta de github, s epude crear de forma grautita, re recomeinda utiliar la palicación de Github par escritorio. YUa sea para ma o windows y luego se haga login con los datos de github.
+
+Ya instalado. 
+
+El siguiente paso es agregar los repositorios, 
+
+File/Add Local repository...
+ 
+	Agreghar la ruta local
+		Ubicando la carpeta Books, seleccionando primeo la carpeta front-end.
+			Open
+
+Add repository.
+
+En algunos casos se tienen algunos archivos que se crean con webstorm no es necesario agregar esta carpeta si que se abre el proyecto en el editor.
+
+Se cierran todos los archivos.
+
+en la razi del proyecto se abro el archivo 
+	.gitignore
+
+		Para ignorar la carpeta
+			.idea/
+
+
+			en el archivo se agrega:
+					.idea
+
+				Se guarda y la carpeta desaparece del altual repositorio.
+
+Otra cosa que se debe hacer como buena practica siempre, es ignorar el archivo
+	.env
+
+Ya que pueden tener datos sensibles que no queremos que esten en el repositorio publico, en nuestro caso es una varaible de entorno pero como se ha dicho es buena practica ignorar este archivo tambien.
+
+
+
+Y otra buena practica que se quiere compartir un archivo .end de ejemplo con datos de ejemplo para que otros desarrolladores o uno mismo en el futuro, al querer instalar exste proyecto sepas que se tiene que definir esta variable, en el entorno local para que funcione.
+
+Para ello se renombrar el archivo .
+	.env 
+
+	a 
+
+	.env.example
+
+con la variable de ejemplo, que seria localhost en el puerto 8000
+
+ahora si volvemos al archivo 
+	.gitignore
+
+
+Bajando un poco vemos que se ignora el archivo
+
+	.env*.local
+
+Esa es la convencion que utiliza next.Js pero tambien funciona el archivo .env
+
+Asi que se va a gregar tambien en el archivo 
+.gitignore
+
+en caso de tenerlo
+
+	.env
+
+Se agrega un commit teniendo todo listo y publicar el repositorio.
+En el clinetd escritior es pulsar el boton commit to main.
+
+Se tiene todo listo y se procede a publicar el repositorio.
+
+en la parte superior esta el boton "Publish repository"
+
+Llamaresmoa al commit "Entrenamiento Front-end" para diferenciarlo Se pude dar una descripción si se prefiere y se pude mantener el codigo en privado o no.
+
+Publicamos.
+
+Ahora si damos click al history y luego clicn en el cliente de github.
+
+Pulsando al boton 
+view on github. no llevara al repositorio a github.
+
+Ahora se repite el proceso para el backend, se abre la acarpeta de front-end se agrega un commit.-
+
+click en publicar asignamos un nombre y publicamos.
+
+	Si va a history vien en github, y se tienen ya los repositorios en github.
+
+ahora ya se tienen los repositorios del back-end y del front-end.
+
+ahora algo importante de comentar es que es necesario de laravel tenga el archivo 
+	package-lock.-json
+
+en caso de que no se tenga se debe generar con un comando
+
+	npm install 
+
+ahora se agregara al repositorio ya que se va a necesitar en el servidor.
+
+
+
+Se puede cerrar las dos pestañas, de github.
+
+
+
+
+
