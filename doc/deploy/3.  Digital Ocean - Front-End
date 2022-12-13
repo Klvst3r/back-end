@@ -1,0 +1,308 @@
+3. 2. Digital Ocean - Front-End
+
+Ahora vamos apublicar el Frontend en la siguiente URL
+ https://dominio.ondigitalocean.app
+
+Que por ahora no se tiene nada.
+
+Para ello nuevamnete en digital Ocean se pulsa del boton "Create" 
+
+Seleccionamos
+	Create Resources From Source code
+
+Desde Github 
+
+	Se selecciona el repositorio, en este caso.
+
+	klvst3r/front-end
+
+el branch esta bien
+	main
+
+El directrorio fuente 
+	/
+
+Se deja el autodeploy seleccionado, 
+	Siguiente.
+
+Se tiene el Web Service, por si se desea utilizar.
+
+Se cambia el nombre del Recurso
+	frontend
+
+Build Phase
+	Node.js Bioldpack v.0.3.4 
+	Procfile Buildpack v0.0.3
+	Custom Build command Buildpack v0.1.1
+
+		npm run build
+
+Run command:	npm start
+HTTP Port 8080
+HTTP Request 1 route
+	Routes		
+
+Enn rutas vanmos a editarla por que es el backend donde esta la API vamos a darle una ruta 
+	/
+ej
+	https://example.ondigitalocean.app/
+
+Guardamos 
+
+Reghresamos y el plan va a ser el mismo seleccionado
+
+	Siguiente
+
+Necesitamos una variable de entorno tambien
+
+
+Keys:							Values.
+
+
+para obtenerla regresamos al editor donde se tiene la aplicación de Next.Js y en el archivo 
+	.env
+
+Se tiene la variable
+
+	NEXT_PUBLIC_BACKEND_URL=http://localhost:8000			 
+
+Esta es la variable que necesitamos.
+
+Se pegan los valores:
+
+
+KEYS:							VALUES:
+NEXT_PUBLIC_BACKEND_URL			https://aprendible-u48yo.ondigitalocean.app/backend
+
+
+
+Haciendo click en aprender mas sobre las variebales de entorno, 
+
+Nos indica que esta es la forma de la URL.
+
+De momento simplemente seleccionamos lo que tenemos en la URL pgandolo en la seccion del valor.
+
+
+Ahora Next.Js se ava a conectar a esta URL para acceder a la API de los Libros 
+
+Se guarda y cuando se quiera agregar un dominio personalizdo se tiene que cambiar aqui tambien en la seccion de vareables de entorno.
+
+
+entonces ya dejamos esos valores 
+
+siguiente.
+ahora ya con las variables de entorno tenemos el resumen de lo que se va a gastar mensualmente 
+
+aproximadamente US $17
+
+Creamos el recurso, esperamos .
+
+
+Ya termino el deply accesamos a la URL
+
+https://aprendible-u48yo.ondigitalocean.app/backend
+
+
+Efectivamente ya tenemos nuestra app de Next.Js ahora si hacemos click en Book list No veremos ningun libro por que no tenemos alguno en la  Bd.
+
+Hay que entender algo en cuanto a Next.Js y es que si intentamos crear un libro. Vemos que nos devuelve a la pagina libros pero no se ve el libro que se ha creado 
+
+si vamos a la consola de Digital Ocean, en la seccion del Backend
+
+y ejecutamos el comando 
+php artisan tinker
+
+>>>Book::get()
+
+
+
+
+Podremos verificar que si se creo el libro en la Bd.
+
+Por que no se ve entonces en la ejecuacipon de nuestra aplicación.
+
+Pues resualta  que ocmo estamos ocupando en pages/libros/index.js
+
+Se esta utilizando 
+
+	export async function getStaticProps(){
+	...
+	}
+
+Este metodo se va a ejecutar unicamente cuando se haga un build.
+
+Es decir cuando hagamos un deploy o cuando se genere un deploy automaticamente cuando hhagamos un cambio en el repositorio.
+
+solamente en ese caso se va a ejecutar este metodo se va acced4r ala API y se va a generar el contenido estatico de esta página.
+
+si no quisieramos este comportamiento, quisieram mos hacer lo siguiente.
+
+
+	export async function getStaticProps(){
+	...
+
+
+	const data = await res.json()
+
+
+	return {
+		props: {
+			books: data
+		},
+
+		revalidate: 10
+	}
+	}
+
+con
+	revalidate: 10
+
+Cada 10 segundo de instancia entyre unapeticion y otra, se va a ejecutar el comando		
+	const data = await res.json()
+
+conlos libros desde la Bd.
+
+
+Depende de las necesidades de cada aplicación si queremso que sea inmediato, podemos utilizar. lo que se utilizo en la vita editar.
+
+Se utilizo.
+
+export async function getServerSideProps(){
+	
+}	
+
+Nos llevamos este codigo al archivo:
+
+pages/libros/index.js
+
+
+export async function getServerSideProps(){
+	...
+
+
+	const data = await res.json()
+
+
+	return {
+		props: {
+			books: data
+		},
+
+		
+	}
+	}
+
+
+ahora no va a esperar que exista un build para que se generen las paginas, las va a generar en el mometno de la peticion 
+
+Adicional a esto podemos ir al
+
+pages/libros/[bid]/index.js
+
+en la seccion 
+
+xport async function getStaticPaths(){
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books`)
+
+    const data = await res.json()
+
+    return {
+        paths: data.map(book =>({
+            params: { bid: String(book.id)}
+            })),
+        fallback: false
+    }
+}
+
+Se podria cambar el fallback a blockin
+
+
+xport async function getStaticPaths(){
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/books`)
+
+    const data = await res.json()
+
+    return {
+        paths: data.map(book =>({
+            params: { bid: String(book.id)}
+            })),
+        fallback: 'blocking'
+    }
+}
+
+
+De esta manera se van a generar estos paths al momento del build es cecir al moento de ejecutar 
+	npm run build
+
+
+
+Pero si la pagina no existe, se va a hacer un serverSideRendering a demanda es decir se va a renderizar del lado del servidor cuando hagamos una petición.
+
+vamos a hacer stos cambios.
+
+en
+
+	pages/libros/index.js
+
+getStaticProps(){
+	
+}
+
+Se cambia por 
+
+getServerSideProps(){
+	
+}
+
+Se agraga un WIP que significa Work in Progress.
+
+Se hace el cambio en git haciendo el git push origin maain
+
+Y se va a generr el deploy automaticamente.
+
+Esperamos a que termine el deploy volcemos a la palicación 
+
+en el navegador de producción:
+
+	aprendible-u4yo.ondigitalocean.app/libros
+
+Veremos el nuevo libro 
+
+Se cra otro.
+
+Y se regresa el listado de libros mostrando ahora el listado de los libros creados de manera inmediata por que estamos haciendo ServerSideRendering.
+
+
+Si hcemos click sobre el libro no llevara  en la descriṕcion del libro
+
+vemos que se genera del lado del servidor ya que es el unico libro que existitia cuando se genero el deploy por eso obntenemos la pagina estatica.
+
+pero cuando le dimos click en el segundo libro nos da respuesta del renderizado del lado del servidor y como es la segunda vez que visitamos el libro 2 ya recibimos la pagina que se habia generado estaticamente en el click anterior.
+
+Ya tenemos nuestra aplicación fullsTack en digital Ocean 
+
+podemos ir A Settings vemos los tres componentes en digital Ocean
+backend - Laravel
+frontend - Next.Js
+aprendible - postgreSQL
+
+De nuestra apilcacion 
+
+y se tienen los repositorios vinculados con github, asi cada vez que hagamos un cambio en cada uno de los repositorios.
+
+automaticamente se va a generar elbiuild de nuestra aplicacioen siempre actualizada.
+
+Y tambien Zero time deployment, es decir siempre sera accesible la página inclusive cuando se este generando el deploy.
+
+
+Otyra cosa importante tambien es que si por algun motivo el build falla nuestra pagina no se va a caer.
+
+
+Seguira funcionando con la ultima vrion que funiono antes de que ogucrriera algun error. Eso no pasaria si etuvieramos utilizando un droplet donde tendriamos que nosotros inivestigar cual es el error, soculucionarlo y mientras la página estaria caida.
+
+otra razon par autilizar apps de digital Ocean.
+
+al final solo queda agregar nuestro dominio personalizado.
+
+
+

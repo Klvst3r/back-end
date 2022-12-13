@@ -1,0 +1,322 @@
+2. Digital Ocean - Publicación del Backend
+
+El siguiente paso sera crear una cuenta en digital Ocean.
+
+si no se tiene se pude crear con unos creditos disponibles.
+
+Obtener  Us$200 en digital ocean que se podran gastar en el transcurso de 60 dias tiempo mas que sufiente par las pruebas.
+
+Una vez creada  la cuenta se hace login. 
+
+en lap agina inicial.
+
+
+Digitasl Ocean Provee un agran variedad de servicios en la nube como seridores tradicionales llamdos Droplets, discos de almacenamientos, based de datos, entre otros.
+
+El servicio que vamos a utiliza en digital Ocean se conoce como 
+Apps/
+	La Premisa de las Apps es enfocate en el codigo no en los servidores.
+
+Las apps detectan lo que nuestra apicación necesita para funcionar y se encarga de construitr y hacer deply de los contenedores, sitios estaicos, etc.
+
+Apps es loq ue se va a utilizar.
+
+Pulsamos en el boton superior crear
+
+Luego en la opcion de apps
+
+Creamos el recurso desde donde vamos a obtener el codigo, nosotros lo subimos a github, y en la parte inferior seleccionamos el repositorio.
+
+es probable que tengamos que darle permisos para que se conecte a la cuenta de github, y tambien se puede dar acceso a repositorios especificos o a todos los repositorios que se tengan.
+
+Posterior a ello llevara a la pantalla de github para seleccionarlo.
+
+Ahora ya aparecen los repositorios en la lista desplegable.
+
+En nuestro caso los repositorios back-end y front-end-
+
+Asi que seleccionamos primero el de back-end, seleccionamos la rama principal "main" el source sidrectory es "/".
+
+Y deejamos activo el Autodeploy, es decir cada vez que se haga un cambio y lo publiquemos en github, digital Ocean. automaticamente lo va a captar y va a generar el vilt para que la aplicacion este simpre con los ultimos cambiso que se tengan en el repositorio.
+
+	Siguiente 
+
+ahora ha dado un nombre aleatorio de la app	podemos cambiarlo si se quiere, pero lo importante es en la parte inferior, el Web service ya detectado que es una aplicación de PHP y si damos click en siguiente.
+
+Tenemos todos los datos del servidor 
+
+El nombre sera simplemente
+	backend
+
+Build Phase
+	Node.js Bioldpack v.0.3.4 //(por so es neesario el archivo packages.log)
+	PHP Buiildpack v.0.210.4
+	Procfile Buildpack v0.0.3
+	Custom Build command Buildpack v0.1.1
+
+		npm run build
+
+Run command:	heroku-php-apache2 public/
+HTTP Port 8080
+HTTP Request 1 route
+	Routes		
+
+Enn rutas vanmos a editarla por que es el backend donde esta la API vamos a darle una ruta 
+ej
+	/backend
+
+
+Para que cuando nos den el dominio
+	Ej.
+		https://example.ondigitalocean.app/backend
+
+Se vera de esta forma y cuando accesemos a backend puedamos visualizar la aplicación de Laravel.
+
+Luego cuando creamos el otro proyecto, vamos a acceder directamente a la raiz para acceder a la palicación de Next.Js
+
+Entonces agregamos 
+	/backend+
+
+	Guardamos
+
+Con esto ya tenemos definido esta ruta, guardamos, regresamos.
+
+Y Pulsamos el boton Edit Plan.
+
+Es decir cuanto vamos a pagar por poner en linea esta aplicación, por defecto nos agrega el plan pro, y agrega dos contenedores, por US $ 24.
+
+Como estamos haciendo pruebas podemos ir a la parte superior seleccionando el Plan basico.
+
+Con costo de US$10 aunque lo podemos bajar de US$ 5. Para nuestro prototipo.
+
+Estamos haciendo una prueba de concepto, para ver como integrar una plicación de Laravel y una aplicación de Next.Js
+
+entonces, regresamos y siguiente.
+
+ahora podemos definir en la sección
+
+	Enviroment Variebles (Env Vars) //Se definen las variables de entorno.
+
+La primera variable de entorno necesaria es.
+
+KEY:
+APP_KEY, 
+
+Esta se obtiene de local en el archivo .env es el campo:
+APP_key= <VALOR>
+
+Es la variable que se necesita principalmente, copiamos este valor ysi queremos ṕodemos añadir uno nuevo con el comando:
+	php artisan key:generate
+
+Veremos que el valor de la llave de la aplicación cambia.
+
+Se copi y se tenga otro disponible..
+
+Este valor lo agregamos en la 
+APP_KEY <valor_de_app_key>
+
+Guardamos, y ya tenemos nuestra variable de entorno, luego vamos a agregar mas solo necesitamos esa 
+
+Cambiamos el nombre de la App en la sección.
+
+	Info.
+	App info.
+		aprendible
+
+	Starter domain  como ejemplo.
+		https://app-name.ondigitalocean.app
+
+	Project
+		jgarcia87
+
+	Guardar.
+
+	Siguiente								
+
+ahora ya se tiene todo configurado, se tiene el plan de pago pero antes de crear el recurso vamos a de una vez crear una Bd que tambien vamos a necesitar.
+
+Asi que vamos a Resoures, y vamos a agregar un recurso "Add Resource"
+
+Seleccionamos Database, Agregar, y nos lleva a otra pantalla y algo a tener en cuenta es que la Bd es PostgreSQL - Version 12(Latest)	.
+
+Esto debemos tebnermlo en cuenta para cuando se haga la conexión, y se tienen los datos la memoria,. indica que el tamañano no es el reomendable para produccion pero que kluego podremos hacer una actualización a  una Bd de producción .
+
+Se le asigna un nombre
+	chose Name.
+		 aprendible
+
+El costo mensual por mantener los datos al mes es de US$7		 
+
+Ahora si pulsamos Agregar
+	Creaer
+
+
+Ahora ya se tienen los dos recursos que se van a crear   
+
+App
+	aprendible
+		Webservice: backend
+
+	Dev Database	
+		aprendible
+
+			Siguiente.
+			Se verifican nuevamente las variables de entorno, que estan bien , siguiente.
+
+Siempre es recomendable checar la mas cercana por lo general, digital ocean detecta la ubicaión diode estamos.
+
+Selecciona la ubicación ás cercana.
+
+automaticamente e se va a crear un CDN y un certificado de SSL.
+
+Siguiente, revisamos y en en resumen nostara 12 al mes.
+
+No estamos revisando ningun servidor, si esta actualizado, si estan encendidos los servicioos todo esta correra por cuenta de Digital Ocean.
+
+Solo se tendra que preocupar por el codigo.
+
+	Create Resources.
+
+		Detras de escena se esta construyendo el Build es decir la construccion de los recursos que se acaban de definir.
+
+
+Esremamos un momento.
+
+Ya terminando el deploy y se hace cieck en 		
+	
+Hacemos click en el boton
+	Live App
+
+Recordemos que en la página inicial no tenemos nad borramos la ruta que nos devuelve welcome, Por eso se tiene el codigo 404.
+
+Este sera la raiz ahora vamos a 
+
+dominio.digitalocean.app/backend/api/books 
+
+Podremos ver que se tiene un error de servidor.
+
+Lo que sucede es que no tenemos la conexion a la BD todavia para ello.
+
+Vamos a la BD y en el boton Upgrade to a Managed Database.
+en la sección
+	Connection Details: Edit
+
+		view para ver los detalles de la conexión a la BD 
+
+		Los copiamos todos 
+
+		Volvemos al Backend
+
+		Y ahroa en las variabels de entorno, vamos a hacer click en Bulk Editor para editar en un archivo como este.
+
+Pegamos los datos de conexxión.
+
+		APP_KEY= <VALORApp_KEY>
+
+
+		host	:	app-valor
+		port 	: 25060
+		username: aprendible
+		password: AVNS_5<valor>
+		database: aprendible
+		sslmode : require
+
+Volvemos al repositorio local y en el archivo 
+	.env se van a caopiar todas las variables que son las necargadas de la conexion con laBd
+
+		DB_CONNECTION=mysql
+		DB_HOST=1227.0.0.1
+		DB_PORT = 3306
+		DB_DATABASE=books
+		DB_USERNAME=root
+		DB_PASSWORD=
+
+
+Se pegan en el archivo del editor de Variables de Entorno
+
+Quedando.
+
+
+				APP_KEY <valor_de_app_key>
+
+				DB_CONNECTION=mysql
+				DB_HOST=1227.0.0.1
+				DB_PORT = 3306
+				DB_DATABASE=books
+				DB_USERNAME=root
+				DB_PASSWORD=
+
+				host	:	app-valor
+				port 	: 25060
+				username: aprendible
+				password: AVNS_5<valor>
+				database: aprendible
+				sslmode : require
+
+con los valores modificamos los valores siguientes:
+
+				DB_CONNECTION=pgsql
+				DB_HOST=app-valor //de la parte inferior
+				DB_PORT = 25060
+				DB_DATABASE=aprendible
+				DB_USERNAME=aprendib le
+				DB_PASSWORD= AVNS_5<valor>
+
+con eso ya se tienen los datos de conexión a la Bd vamos a leiminar lo que se tiene quedando: 				
+
+				APP_KEY <valor_de_app_key>
+
+				DB_CONNECTION=pgsql
+				DB_HOST=app-valor //de la parte inferior
+				DB_PORT = 25060
+				DB_DATABASE=aprendible
+				DB_USERNAME=aprendib le
+				DB_PASSWORD= AVNS_5<valor>
+
+Guardamos y se visualizaran todas las variables. Se guardan y vemos que se genera otro deploy. Esperamos a que termine.
+
+una vez que se concluyo el deploy volvemos a la URL de Digital Ocean. Vamos a seguiir viendo otro error
+
+	ej.
+		500 | SERVER ERRO
+
+Pero en este caso la razon es distinta, para ello vamos nuevamante a la configuración del deploy en digital Ocean		
+
+
+Y podemos hacer click sobre la pestaña :console
+
+ejecutamos el comando:
+	cat storage/logs/laravel.log 
+
+Para revisar los detalles del error. 
+
+Podremos detectar el error de
+
+	PDOException (code: 42P01) SQLSTATE[42P01]
+
+		Inidcando
+			Undefined table
+
+Hay una tabla no definida llamada books, lo que sucede aqui es que no hemos ejecutados las migraciones.
+
+Para ello 
+	 Limpiamos terminal.
+
+
+ejecutamos:
+	php artisan migrate --force 
+
+Ya que cuando estamos en producción nos pregunta si realmente queremos hacerlo.
+
+Aceptamos.
+
+Ahora tenemos las tablas que nos han generado.
+
+Actualizamos y ahora vemos el array vacio de los libros, ya que no se tiene ninguno.
+
+Esta es la URL de backend .
+
+
+
+
+
